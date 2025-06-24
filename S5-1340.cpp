@@ -82,18 +82,18 @@ int sumDate(int year, int month, int date) {
 }
 
 int totalNewYear(int year, string month, string date, string currentTime) {
-    int time = (currentTime[0] - '0') * 10;
-    time += currentTime[1] - '0';
-    time *= 60;
-    time += (currentTime[3] - '0') * 10;
-    time += currentTime[4] - '0';
+    int time = (currentTime.at(0) - '0') * 10;
+	time += (currentTime.at(1) - '0');
+	time *= 60;
+	time += (currentTime.at(3) - '0') * 10;
+	time += (currentTime.at(4) - '0');
 
-    int mon = currentMonth(month);
-    int dat = (date[0] - '0') * 10 + (date[1] - '0');
-    int sum = sumDate(year, mon, dat);
-    time += sum * 60 * 24;
+	int mon = currentMonth(month);
+	int dat = (date.at(0) - '0') * 10 + (date.at(1) - '0');
+	int sum = sumDate(year, mon, dat);
+	time += sum * 60 * 24;
 
-    return time;
+	return time;
 }
 
 int main() {
@@ -108,14 +108,13 @@ int main() {
         currentYear = 366 * 24 * 60L;
     }
     else{
-        currentYear = 365 * 25 * 60L;
+        currentYear = 365 * 24 * 60L;
     }
 
     long double ans = (totalNewYear(year, month, date, currentTime) * 100L);
     ans /= currentYear;
 
-    cout.precision(17);
-    cout << ans;
+    printf("%.16llf\n", ans);
 
     return 0;
 }
