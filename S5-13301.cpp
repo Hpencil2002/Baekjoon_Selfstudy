@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int N;
+    cin >> N;
+
+    long long dp[10010];
+    dp[1] = 1;
+    dp[2] = 1;
+    for (int i = 3; i <= N; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    cout << dp[N] * 2 + (dp[N] + dp[N - 1]) * 2;
+
+    return 0;
+}
