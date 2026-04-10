@@ -3,74 +3,85 @@
 #include <cmath>
 using namespace std;
 
-long long X;
-int A, B;
-string first, second;
+string A, B;
+int cnt;
+long long ans, ansA, ansB;
 
-int findMinDigit(string str) {
+int calMax(string str) {
     int res = 0;
 
-    for (int i = 0; i < str.length(); i++) {
-        if (str[i] >= '0' && str[i] <= '9') {
-            res = max(res, str[i] - '0');
+    for (int i = 0; i < str.size(); i++) {
+        if (isalpha(str[i])) {
+            int cmp = str[i] - 'a';
+            cmp += 11;
+
+            res = max(res, cmp);
         }
         else {
-            res = max(res, str[i] - 'a' + 11);
+            int cmp = str[i] - '0';
+            cmp += 1;
+
+            res = max(res, cmp);
         }
     }
 
     return res;
 }
 
-long long changeDecimalNumber(string str, int digit) {
+long long calc(int num, string str) {
     long long res = 0;
+    int tmp = 0;
 
-    for (int i = 0; i < str.length(); i++) {
-        int num;
-
-        if (str[i] > '0' && str[i] <= '9') {
-            num = str[i] - '0';
+    for (int i = str.size() - 1; i >= 0; i--) {
+        int rem;
+        if (isalpha(str[i])) {
+            rem = str[i] - 'a';
+            rem += 10;
         }
         else {
-            num = str[i] - 'a' + 10;
+            rem = str[i] - '0';
         }
 
-        res += num * pow(digit, str.length() - i - 1);
+        res += pow(num, tmp) * rem;
+        tmp += 1;
     }
 
     return res;
 }
 
 int main() {
-    cin >> first >> second;
+    cin >> A >> B;
 
-    int digitA = findMinDigit(first);
-    int digitB = findMinDigit(second);
+    int maxA = calMax(A);
+    int maxB = calMax(B);
 
-    int cnt = 0;
-    for (int i = digitA; i <= 36; i++) {
-        for (int j = digitB; j <= 36; j++) {
-            long long changeA = changeDecimalNumber(first, i);
-            long long changeB = changeDecimalNumber(second, j);
+    for (int i = maxA; i <= 36; i++) {
+        for (int j = maxB; j <= 36; j++) {
+            long long tmpA = calc(i, A);
+            long long tmpB = calc(j, B);
 
-            if (i != j && changeA >= 0 && changeA == changeB) {
+            if (i == j) {
+                continue;
+            }
+
+            if (tmpA == tmpB && tmpA >= 0) {
                 cnt += 1;
 
-                X = changeA;
-                A = i;
-                B = j;
+                ans = tmpA;
+                ansA = i;
+                ansB = j;
             }
         }
     }
 
-    if (cnt == 0) {
+    if (cnt >= 2) {
+        cout << "Multiple";
+    }
+    else if (cnt == 0) {
         cout << "Impossible";
     }
-    else if (cnt == 1) {
-        cout << X << ' ' << A << ' ' << B;
-    }
     else {
-        cout << "Multiple";
+        cout << ans << ' ' << ansA << ' ' << ansB;
     }
 
     return 0;
